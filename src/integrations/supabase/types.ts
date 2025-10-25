@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      portfolio_snapshots: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          holdings: Json
+          id: string
+          is_public: boolean | null
+          snapshot_hash: string
+          total_pnl_percent: number
+          total_pnl_usd: number
+          total_value_usd: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          holdings: Json
+          id?: string
+          is_public?: boolean | null
+          snapshot_hash: string
+          total_pnl_percent: number
+          total_pnl_usd: number
+          total_value_usd: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          holdings?: Json
+          id?: string
+          is_public?: boolean | null
+          snapshot_hash?: string
+          total_pnl_percent?: number
+          total_pnl_usd?: number
+          total_value_usd?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trades: {
+        Row: {
+          amount: number
+          asset: Database["public"]["Enums"]["crypto_asset"]
+          created_at: string | null
+          executed_at: string
+          fee_usd: number | null
+          id: string
+          notes: string | null
+          price_usd: number
+          total_value_usd: number
+          trade_type: Database["public"]["Enums"]["trade_type"]
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          asset: Database["public"]["Enums"]["crypto_asset"]
+          created_at?: string | null
+          executed_at: string
+          fee_usd?: number | null
+          id?: string
+          notes?: string | null
+          price_usd: number
+          total_value_usd: number
+          trade_type: Database["public"]["Enums"]["trade_type"]
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          asset?: Database["public"]["Enums"]["crypto_asset"]
+          created_at?: string | null
+          executed_at?: string
+          fee_usd?: number | null
+          id?: string
+          notes?: string | null
+          price_usd?: number
+          total_value_usd?: number
+          trade_type?: Database["public"]["Enums"]["trade_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +103,20 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      crypto_asset:
+        | "BTC"
+        | "ETH"
+        | "SOL"
+        | "USDC"
+        | "USDT"
+        | "MATIC"
+        | "AVAX"
+        | "DOT"
+        | "LINK"
+        | "UNI"
+        | "AAVE"
+        | "other"
+      trade_type: "buy" | "sell"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +243,22 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      crypto_asset: [
+        "BTC",
+        "ETH",
+        "SOL",
+        "USDC",
+        "USDT",
+        "MATIC",
+        "AVAX",
+        "DOT",
+        "LINK",
+        "UNI",
+        "AAVE",
+        "other",
+      ],
+      trade_type: ["buy", "sell"],
+    },
   },
 } as const

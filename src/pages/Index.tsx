@@ -1,18 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Auth } from "@/components/Auth";
+import { TradeForm } from "@/components/TradeForm";
+import { TradesList } from "@/components/TradesList";
+import { PortfolioShare } from "@/components/PortfolioShare";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Wallet, TrendingUp, Shield, Activity, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { Wallet, TrendingUp, Shield, Activity, LogOut } from "lucide-react";
 import DelegationPanel from "@/components/DelegationPanel";
 import PerformanceChart from "@/components/PerformanceChart";
 import TransactionHistory from "@/components/TransactionHistory";
 import StatsOverview from "@/components/StatsOverview";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
-  const [walletConnected, setWalletConnected] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [refreshTrades, setRefreshTrades] = useState(0);
+  const { toast } = useToast();
 
-  const handleConnectWallet = () => {
-    setWalletConnected(true);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Signed out",
+      description: "You have been logged out successfully",
+    });
   };
 
   return (
@@ -30,13 +54,18 @@ const Index = () => {
             </div>
           </div>
           
-          <Button 
-            onClick={handleConnectWallet}
-            className="gradient-primary shadow-glow hover:opacity-90 transition-opacity"
-          >
-            <Wallet className="h-4 w-4 mr-2" />
-            {walletConnected ? "0x742d...5f3a" : "Connect Wallet"}
-          </Button>
+          {user && (
+            <div className="flex items-center gap-3">
+              <div className="text-right hidden sm:block">
+                <p className="text-xs text-muted-foreground">Logged in</p>
+                <p className="text-sm font-medium">{user.email}</p>
+              </div>
+              <Button onClick={handleSignOut} variant="outline" size="sm">
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -81,27 +110,34 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Dashboard */}
-      {walletConnected && (
+      {/* Auth / Dashboard */}
+      {!user ? (
+        <section className="container mx-auto px-4 pb-20">
+          <Auth />
+        </section>
+      ) : (
         <section className="container mx-auto px-4 pb-20">
           <StatsOverview />
           
-          <Tabs defaultValue="overview" className="mt-8">
+          <Tabs defaultValue="portfolio" className="mt-8">
             <TabsList className="glass-effect">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="delegation">Delegation</TabsTrigger>
-              <TabsTrigger value="history">History</TabsTrigger>
+              <TabsTrigger value="portfolio">Crypto Portfolio</TabsTrigger>
+              <TabsTrigger value="delegation">Delegation (Mock)</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="overview" className="mt-6 space-y-6">
-              <PerformanceChart />
+            <TabsContent value="portfolio" className="mt-6 space-y-6">
+              <div className="grid lg:grid-cols-2 gap-6">
+                <TradeForm onTradeAdded={() => setRefreshTrades(prev => prev + 1)} />
+                <PortfolioShare />
+              </div>
+              <TradesList refreshTrigger={refreshTrades} />
             </TabsContent>
             
-            <TabsContent value="delegation" className="mt-6">
-              <DelegationPanel />
-            </TabsContent>
-            
-            <TabsContent value="history" className="mt-6">
+            <TabsContent value="delegation" className="mt-6 space-y-6">
+              <div className="grid lg:grid-cols-2 gap-6">
+                <DelegationPanel />
+                <PerformanceChart />
+              </div>
               <TransactionHistory />
             </TabsContent>
           </Tabs>
