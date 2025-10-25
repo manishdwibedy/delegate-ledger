@@ -7,11 +7,12 @@ import { PortfolioShare } from "@/components/PortfolioShare";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Wallet, TrendingUp, Shield, Activity, LogOut } from "lucide-react";
+import { TrendingUp, Shield, Activity, LogOut } from "lucide-react";
 import DelegationPanel from "@/components/DelegationPanel";
 import PerformanceChart from "@/components/PerformanceChart";
 import TransactionHistory from "@/components/TransactionHistory";
 import StatsOverview from "@/components/StatsOverview";
+import Wallet from "@/components/Wallet";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
@@ -117,8 +118,15 @@ const Index = () => {
         </section>
       ) : (
         <section className="container mx-auto px-4 pb-20">
-          <StatsOverview />
-          
+          <div className="grid lg:grid-cols-3 gap-6 mb-8">
+            <div className="lg:col-span-2">
+              <StatsOverview />
+            </div>
+            <div>
+              <Wallet />
+            </div>
+          </div>
+
           <Tabs defaultValue="portfolio" className="mt-8">
             <TabsList className="glass-effect">
               <TabsTrigger value="portfolio">Crypto Portfolio</TabsTrigger>
