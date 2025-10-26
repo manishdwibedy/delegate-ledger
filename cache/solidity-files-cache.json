@@ -35,6 +35,41 @@
       "artifacts": [
         "TradeLogger"
       ]
+    },
+    "/Users/manish/dev/delegate-ledger/smart_contracts/PerformanceTracker.sol": {
+      "lastModificationDate": 1761483593158,
+      "contentHash": "5cd1f94b6024ae7ca0b924ea6c3df2ec",
+      "sourceName": "smart_contracts/PerformanceTracker.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "PerformanceTracker"
+      ]
     }
   }
 }
