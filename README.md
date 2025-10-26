@@ -1,73 +1,206 @@
-# Welcome to your Lovable project
+# DelegateX
 
-## Project info
+A non-custodial delegated trading platform that enables users to grant limited trading authority while maintaining full asset control. All trades and performance metrics are recorded immutably on the Ethereum blockchain.
 
-**URL**: https://lovable.dev/projects/f025af0d-3fb0-4103-ad69-86aa9e07240e
+## Overview
 
-## How can I edit this code?
+DelegateX is a delegated trading platform that enables clients to grant limited, non-custodial trading authority to managers, with performance results recorded immutably on the Ethereum blockchain. The platform addresses the challenge of verifiable delegated management of assets when trading execution occurs off-chain via centralized brokerage APIs, while storing only performance metrics on-chain.
 
-There are several ways of editing your application.
+### Original Vision: Delegated Trading Platform Architecture Roadmap (V1.0 - V3.0)
+- **V1.0**: Hackathon MVP proving core concepts of delegated authority (ERC-20 approve/permit) and on-chain performance tracking
+- **V2.0**: Integration with real brokerage APIs and traditional assets
+- **V3.0**: Full production platform with advanced features
 
-**Use Lovable**
+### Current Status: v0.8 (Hackathon MVP - Proof of Concept)
+This version proves the core concepts with mock ERC-20 tokens, ERC-20 approve() delegation, and on-chain performance tracking via stubbed off-chain engine.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f025af0d-3fb0-4103-ad69-86aa9e07240e) and start prompting.
+#### ✅ Completed Features (v0.8)
+- **Non-Custodial Trading**: Assets remain in user wallets at all times
+- **On-Chain Trade Logging**: All trades recorded via Ethereum smart contract (TradeLogger.sol)
+- **P&L Calculation**: Automatic profit/loss computation for completed trading cycles
+- **Portfolio Sharing**: Shareable portfolio views with unique hashes
+- **Mock Delegation**: Simulated delegation interface using ERC-20 approve() mechanism
+- **Performance Analytics**: Charts and statistics for trade performance
+- **Multi-Database Support**: Switch between Supabase and MongoDB backends
+- **Wallet Integration**: Connect Ethereum wallets for on-chain interactions
+- **ERC-20 Delegation**: Client uses ERC-20 approve() to delegate spending limits to manager wallet
+- **On-Chain Performance Tracking**: PerformanceTracker.sol contract for recording metrics
 
-Changes made via Lovable will be committed automatically to this repo.
+#### 🚧 Planned for v0.9 (Enhanced MVP)
+- **Off-Chain Engine Integration**: Replace stubbed P&L with basic FastAPI simulation engine
+- **Improved Delegation UI**: Enhanced delegation setup with clearer permission controls
+- **Real-Time Performance Updates**: Live updates from off-chain engine to on-chain contracts
+- **Basic Risk Management**: Position size limits and basic stop-loss simulation
+- **Enhanced Testing**: Comprehensive smart contract test suite
 
-**Use your preferred IDE**
+#### 🎯 Roadmap to v1.0 (Production Ready)
+- **Real Brokerage Integration**: Connect to actual brokerage APIs (Alpaca, Interactive Brokers)
+- **Traditional Asset Support**: Enable trading of equities and fiat currencies
+- **Advanced Delegation Controls**: Granular permissions (max position sizes, asset restrictions, time limits)
+- **Production Smart Contracts**: Audited contracts with multi-sig controls
+- **Institutional Features**: White-label options, compliance tools, enterprise APIs
+- **Multi-Chain Support**: Ethereum mainnet + Layer 2 solutions
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Frontend
+- **React 18** with TypeScript
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
+- **shadcn/ui** for UI components
+- **React Router** for navigation
+- **React Query** for data fetching
+- **Recharts** for data visualization
 
-Follow these steps:
+### Backend & Database
+- **Supabase** for authentication and real-time database
+- **MongoDB** for alternative database option
+- **React Query** for state management
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Blockchain
+- **Hardhat** for smart contract development and testing
+- **Ethers.js** for blockchain interactions
+- **Solidity 0.8.4** for smart contracts
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Development Tools
+- **ESLint** for code linting
+- **TypeScript** for type safety
+- **PostCSS** and **Autoprefixer** for CSS processing
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Architecture
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Smart Contract (TradeLogger.sol)
+The core smart contract handles:
+- Logging buy/sell trades with timestamps and prices
+- Tracking open positions per user and token
+- Calculating P&L on position closures
+- Emitting events for transparency
+
+### Frontend Components
+- **Auth**: User authentication via Supabase
+- **TradeForm**: Input form for logging trades
+- **TradesList**: Display of logged trades
+- **PnLDisplay**: Profit/loss calculations and history
+- **DelegationPanel**: Mock interface for delegation setup
+- **PerformanceChart**: Visual representation of trading performance
+- **Wallet**: Ethereum wallet connection and display
+
+### Database Schema
+Supports both Supabase (PostgreSQL) and MongoDB with tables/collections for:
+- Users
+- Trades
+- P&L results
+- Delegations (future)
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+ and npm
+- Git
+- Ethereum wallet (MetaMask recommended)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <YOUR_GIT_URL>
+   cd delegate-ledger
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   Create a `.env.local` file with:
+   ```
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   VITE_MONGODB_URI=your_mongodb_uri
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Smart Contract Development**
+   ```bash
+   # Install Hardhat dependencies
+   npm install --save-dev @nomiclabs/hardhat-ethers @nomiclabs/hardhat-waffle chai ethereum-waffle
+
+   # Run tests
+   npx hardhat test
+   ```
+
+### Building for Production
+```bash
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+### Deployment
+The app can be deployed to any static hosting service (Vercel, Netlify, etc.) or via Lovable's publish feature.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Project Structure
 
-**Use GitHub Codespaces**
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # shadcn/ui components
+│   ├── Auth.tsx        # Authentication component
+│   ├── TradeForm.tsx   # Trade logging form
+│   ├── TradesList.tsx  # Trades display
+│   └── ...
+├── pages/              # Route components
+│   ├── Index.tsx       # Main dashboard
+│   ├── PortfolioView.tsx # Public portfolio view
+│   └── NotFound.tsx    # 404 page
+├── integrations/       # External service integrations
+│   └── supabase/       # Supabase client and types
+├── lib/                # Utilities and configurations
+│   ├── database.ts     # Database abstraction layer
+│   ├── contract.ts     # Smart contract interactions
+│   └── utils.ts        # Helper functions
+└── hooks/              # Custom React hooks
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+smart_contracts/
+└── TradeLogger.sol     # Main smart contract
 
-## What technologies are used for this project?
+supabase/
+└── migrations/         # Database migrations
+```
 
-This project is built with:
+## Smart Contract Details
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### TradeLogger Contract
+- **Solidity Version**: ^0.8.0
+- **Functions**:
+  - `logTrade()`: Logs a trade and updates positions/P&L
+  - `getTotalTrades()`: Returns total trade count
+  - `getTotalPnLResults()`: Returns total P&L records
+- **Events**:
+  - `TradeLogged`: Emitted on each trade
+  - `PnLCalculated`: Emitted when P&L is calculated
 
-## How can I deploy this project?
+### Testing
+Run smart contract tests with:
+```bash
+npx hardhat test
+```
 
-Simply open [Lovable](https://lovable.dev/projects/f025af0d-3fb0-4103-ad69-86aa9e07240e) and click on Share -> Publish.
+## Contributing
 
-## Can I connect a custom domain to my Lovable project?
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Yes, you can!
+## License
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Disclaimer
+
+This is a hackathon MVP for educational purposes only. Not intended for production use without thorough security audits and testing.
