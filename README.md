@@ -78,10 +78,11 @@ The core smart contract handles:
 
 ### Frontend Components
 - **Auth**: User authentication via Supabase
-- **TradeForm**: Input form for logging trades
+- **TradeForm**: Input form for logging trades (supports PyUSD stablecoin)
 - **TradesList**: Display of logged trades
 - **PnLDisplay**: Profit/loss calculations and history
-- **DelegationPanel**: Mock interface for delegation setup
+- **DelegationPanel**: Mock interface for delegation setup with PyUSD recommendations
+- **PyUSDFeatures**: Dedicated component showcasing PyUSD benefits for delegated trading
 - **PerformanceChart**: Visual representation of trading performance
 - **Wallet**: Ethereum wallet connection and display
 
@@ -149,7 +150,9 @@ src/
 ├── components/          # Reusable UI components
 │   ├── ui/             # shadcn/ui components
 │   ├── Auth.tsx        # Authentication component
-│   ├── TradeForm.tsx   # Trade logging form
+│   ├── TradeForm.tsx   # Trade logging form (PyUSD enabled)
+│   ├── DelegationPanel.tsx # Delegation with PyUSD features
+│   ├── PyUSDFeatures.tsx   # PyUSD benefits showcase
 │   ├── TradesList.tsx  # Trades display
 │   └── ...
 ├── pages/              # Route components
@@ -200,6 +203,27 @@ npx hardhat test
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## PyUSD Integration
+
+DelegateX now supports PayPal's PyUSD stablecoin to demonstrate advanced stablecoin features in delegated trading:
+
+### PyUSD Benefits for Delegation
+- **Price Stability**: Maintains $1.00 peg, perfect for setting predictable delegation limits
+- **PayPal Backing**: Institutional-grade security and regulatory compliance
+- **Yield Opportunities**: Earn yield through PayPal's ecosystem while delegating
+- **Fast Settlements**: Near-instant transfers ideal for active trading strategies
+
+### Use Cases
+- **Stable Delegation Limits**: Set $10,000 PyUSD delegation that remains $10,000 worth
+- **Risk Management**: Use PyUSD for stop-loss and position sizing controls
+- **Performance Tracking**: Accurate P&L calculations in stable dollars
+- **Portfolio Stability**: Maintain purchasing power during market volatility
+
+### Components
+- **PyUSDFeatures**: Dedicated showcase of PyUSD benefits for delegated trading
+- **Enhanced DelegationPanel**: Recommends PyUSD for delegation with stability highlights
+- **TradeForm**: PyUSD added to supported assets for trading and logging
 
 ## Disclaimer
 

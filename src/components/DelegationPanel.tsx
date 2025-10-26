@@ -92,6 +92,18 @@ const DelegationPanel = () => {
             </div>
           </div>
 
+          <div className="p-4 rounded-lg bg-green-500/5 border border-green-500/10">
+            <div className="flex items-start gap-3">
+              <DollarSign className="h-5 w-5 text-green-500 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium mb-1">PyUSD Stablecoin Advantage</p>
+                <p className="text-xs text-muted-foreground">
+                  Use PyUSD for delegation to maintain stable purchasing power. Your $10,000 limit stays $10,000 worth, regardless of market volatility.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Manager Address</span>
@@ -104,6 +116,10 @@ const DelegationPanel = () => {
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Network</span>
               <span>Ethereum Mainnet</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Recommended Asset</span>
+              <span className="font-medium text-green-600">PyUSD</span>
             </div>
           </div>
 

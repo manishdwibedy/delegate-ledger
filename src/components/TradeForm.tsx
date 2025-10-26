@@ -12,7 +12,7 @@ import { ethers } from "ethers";
 import { tradeLoggerContract, getTransactionEtherscanUrl } from "@/lib/contract";
 
 const CRYPTO_ASSETS = [
-  "BTC", "ETH", "SOL", "USDC", "USDT", "MATIC", 
+  "BTC", "ETH", "SOL", "USDC", "USDT", "PyUSD", "MATIC",
   "AVAX", "DOT", "LINK", "UNI", "AAVE", "other"
 ];
 
