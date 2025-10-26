@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DollarSign, Shield, TrendingUp, Clock, CheckCircle2 } from "lucide-react";
+import { DollarSign, Shield, TrendingUp, Clock, CheckCircle2, CreditCard, PiggyBank, Lock, Zap } from "lucide-react";
 
 const PyUSDFeatures = () => {
   const benefits = [
@@ -24,6 +24,26 @@ const PyUSDFeatures = () => {
       icon: <Clock className="h-6 w-6 text-orange-500" />,
       title: "Fast Settlements",
       description: "Near-instant transfers and settlements, ideal for active delegated trading strategies."
+    },
+    {
+      icon: <CreditCard className="h-6 w-6 text-indigo-500" />,
+      title: "PayPal Integration",
+      description: "Seamlessly connect with PayPal for instant transfers, merchant payments, and wallet bridging."
+    },
+    {
+      icon: <PiggyBank className="h-6 w-6 text-yellow-500" />,
+      title: "Advanced Yield",
+      description: "Access enhanced yield through staking, lending pools, and ecosystem rewards beyond basic interest."
+    },
+    {
+      icon: <Lock className="h-6 w-6 text-red-500" />,
+      title: "Enhanced Security",
+      description: "Built-in KYC compliance, audit trails, and multi-signature support for high-value delegations."
+    },
+    {
+      icon: <Zap className="h-6 w-6 text-cyan-500" />,
+      title: "Instant Liquidity",
+      description: "Convert to/from fiat instantly through PayPal's network, enabling real-time financial operations."
     }
   ];
 
@@ -32,7 +52,11 @@ const PyUSDFeatures = () => {
     "Track performance in stable dollars for accurate P&L",
     "Reduce risk exposure in delegated trading scenarios",
     "Maintain purchasing power during market volatility",
-    "Enable algorithmic delegation strategies with predictable values"
+    "Enable algorithmic delegation strategies with predictable values",
+    "Instant fiat conversion for emergency withdrawals",
+    "Multi-signature approvals for large delegation amounts",
+    "Automated yield compounding on delegated funds",
+    "Real-time compliance monitoring and reporting"
   ];
 
   return (
@@ -53,7 +77,7 @@ const PyUSDFeatures = () => {
           </Badge>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {benefits.map((benefit, index) => (
             <div key={index} className="flex items-start gap-3 p-4 rounded-lg bg-muted/30">
               {benefit.icon}
@@ -110,15 +134,56 @@ const PyUSDFeatures = () => {
           </div>
         </div>
 
-        <div className="mt-6 p-4 rounded-lg bg-muted/30">
-          <h4 className="font-medium mb-2">Example Use Case</h4>
-          <p className="text-sm text-muted-foreground mb-3">
-            Client delegates $50,000 PyUSD to a manager for crypto trading. The manager can execute trades
-            up to this stable limit while the client maintains full custody of their PyUSD tokens.
-          </p>
-          <Button variant="outline" size="sm" className="w-full">
-            Try PyUSD Delegation
-          </Button>
+        <div className="mt-6 space-y-4">
+          <div className="p-4 rounded-lg bg-muted/30">
+            <h4 className="font-medium mb-2">Example Use Case</h4>
+            <p className="text-sm text-muted-foreground mb-3">
+              Client delegates $50,000 PyUSD to a manager for crypto trading. The manager can execute trades
+              up to this stable limit while the client maintains full custody of their PyUSD tokens.
+            </p>
+            <Button variant="outline" size="sm" className="w-full">
+              Try PyUSD Delegation
+            </Button>
+          </div>
+
+          <div className="p-4 rounded-lg bg-gradient-to-r from-indigo-500/5 to-purple-500/5 border border-indigo-500/10">
+            <h4 className="font-medium mb-2 flex items-center gap-2">
+              <CreditCard className="h-5 w-5 text-indigo-500" />
+              PayPal Integration Features
+            </h4>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>• Direct transfers between PayPal accounts and PyUSD wallets</li>
+              <li>• Merchant payment processing with instant settlement</li>
+              <li>• Seamless bridging for cross-border transactions</li>
+              <li>• Automated reconciliation with PayPal statements</li>
+            </ul>
+          </div>
+
+          <div className="p-4 rounded-lg bg-gradient-to-r from-yellow-500/5 to-orange-500/5 border border-yellow-500/10">
+            <h4 className="font-medium mb-2 flex items-center gap-2">
+              <PiggyBank className="h-5 w-5 text-yellow-500" />
+              Advanced Yield Opportunities
+            </h4>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>• Staking rewards through PayPal's liquidity pools</li>
+              <li>• Lending protocols with competitive APYs</li>
+              <li>• Ecosystem incentives for long-term holding</li>
+              <li>• Automated yield farming strategies</li>
+            </ul>
+          </div>
+
+          <div className="p-4 rounded-lg bg-gradient-to-r from-red-500/5 to-pink-500/5 border border-red-500/10">
+            <h4 className="font-medium mb-2 flex items-center gap-2">
+              <Lock className="h-5 w-5 text-red-500" />
+              Security & Compliance
+            </h4>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>• Integrated KYC verification for all transactions</li>
+              <li>• Immutable audit trails for regulatory reporting</li>
+              <li>• Multi-signature support for institutional delegations</li>
+              <li>• Real-time compliance monitoring and alerts</li>
+            </ul>
+          </div>
         </div>
       </Card>
     </div>
