@@ -126,10 +126,10 @@ export const TradesList = ({ refreshTrigger }: TradesListProps) => {
 
               <div className="text-right">
                 <p className="font-semibold">
-                  {trade.amount} @ ${trade.price_usd.toLocaleString()}
+                  {trade.amount} {trade.asset} @ ${trade.price_usd.toFixed(2)}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Total: ${trade.total_value_usd.toLocaleString()}
+                  Total: ${trade.total_value_usd.toFixed(2)}
                 </p>
               </div>
             </div>
