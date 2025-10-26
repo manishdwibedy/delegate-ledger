@@ -1,3 +1,9 @@
-- [x] Update price parsing in src/lib/contract.ts to use 2 decimals for USD prices
-- [x] Update formatCurrency function in src/components/PnLDisplay.tsx to divide by 100 after formatEther
-- [x] Test the P/L display with sample trades to ensure correct USD values (app running on http://localhost:8082/)
+# Task: Move testnet wallet to navbar and remove total value locked
+
+## Steps to Complete:
+- [x] Remove "Total Value Locked" stat from StatsOverview component
+- [x] Move Wallet component from dashboard grid to header/navbar in Index.tsx
+- [x] Adjust header layout to accommodate the wallet component
+- [x] Update dashboard grid layout to account for removed Wallet component
+- [x] Test layout changes to ensure wallet displays properly in navbar (dev server running on http://localhost:8083)
+- [x] Verify StatsOverview renders correctly without TVL stat

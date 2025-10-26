@@ -1,23 +1,8 @@
 import { Card } from "@/components/ui/card";
-import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 const StatsOverview = () => {
   const stats = [
-    {
-      label: "Total Value Locked",
-      value: "$12,450.00",
-      change: "+5.2%",
-      positive: true,
-      icon: Wallet,
-    },
-    {
-      label: "Delegated Amount",
-      value: "$8,500.00",
-      change: "68.3%",
-      positive: true,
-      icon: TrendingUp,
-      subtext: "of TVL",
-    },
     {
       label: "Net P&L (30d)",
       value: "+$324.50",
@@ -55,7 +40,6 @@ const StatsOverview = () => {
               <p className="text-2xl font-bold mb-1">{stat.value}</p>
               <p className="text-sm text-muted-foreground">
                 {stat.label}
-                {stat.subtext && <span className="text-xs ml-1">({stat.subtext})</span>}
               </p>
             </div>
           </Card>

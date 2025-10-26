@@ -79,6 +79,7 @@ const Index = () => {
           
           {user && (
             <div className="flex items-center gap-3">
+              <Wallet />
               <div className="text-right hidden sm:block">
                 <p className="text-xs text-muted-foreground">Logged in</p>
                 <p className="text-sm font-medium">{user.email}</p>
@@ -140,15 +141,14 @@ const Index = () => {
         </section>
       ) : (
         <section className="container mx-auto px-4 pb-20">
-          <div className="grid lg:grid-cols-3 gap-6 mb-8">
+          {/* <div className="grid lg:grid-cols-3 gap-6 mb-8">
             <div className="lg:col-span-2">
               <StatsOverview />
             </div>
             <div className="space-y-4">
-              <Wallet />
               <DatabaseSwitcher />
             </div>
-          </div>
+          </div> */}
 
           <Tabs defaultValue="portfolio" className="mt-8">
             <TabsList className="glass-effect">

@@ -284,11 +284,11 @@ const Wallet = () => {
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <WalletIcon className="h-5 w-5 text-primary" />
+        <div className="flex items-center gap-2">
+          <WalletIcon className="h-4 w-4 text-primary" />
           <div>
-            <p className="font-medium">Testnet Wallet</p>
-            <p className="text-sm text-muted-foreground">SepoliaETH Network</p>
+            <p className="text-sm font-medium">Testnet Wallet</p>
+            <p className="text-xs text-muted-foreground">Sepolia Testnet</p>
           </div>
         </div>
 
@@ -302,15 +302,22 @@ const Wallet = () => {
             <ExternalLink className="h-4 w-4" />
           </Button>
           {isConnected ? (
-            <CheckCircle className="h-5 w-5 text-green-500" />
+            <>
+              <CheckCircle className="h-5 w-5 text-green-500" />
+              <Button onClick={disconnectWallet} variant="outline" size="sm">
+                Disconnect
+              </Button>
+            </>
           ) : (
-            <Badge variant="secondary">Disconnected</Badge>
+            <Button onClick={connectWallet} disabled={isLoading} size="sm">
+              {isLoading ? "Connecting..." : "Connect"}
+            </Button>
           )}
         </div>
       </div>
 
       {isConnected && account && (
-        <div className="mt-4 space-y-2">
+        <div className="mt-4 flex gap-6">
           <div>
             <p className="text-sm font-medium">Account</p>
             <p className="text-sm text-muted-foreground font-mono">
@@ -320,23 +327,13 @@ const Wallet = () => {
           <div>
             <p className="text-sm font-medium">Balance</p>
             <p className="text-sm text-muted-foreground">
-              {balance ? `${parseFloat(balance).toFixed(4)} ETH` : "Loading..."}
+              {balance ? `${parseFloat(balance)} ETH` : "Loading..."}
             </p>
           </div>
         </div>
       )}
 
-      <div className="mt-4">
-        {!isConnected ? (
-          <Button onClick={connectWallet} disabled={isLoading} className="w-full">
-            {isLoading ? "Connecting..." : "Connect Wallet"}
-          </Button>
-        ) : (
-          <Button onClick={disconnectWallet} variant="outline" className="w-full">
-            Disconnect
-          </Button>
-        )}
-      </div>
+
     </Card>
   );
 };
