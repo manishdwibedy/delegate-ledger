@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { dbManager } from "@/lib/database";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, ArrowDownRight, Trash2 } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, Trash2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { getTransactionEtherscanUrl } from "@/lib/contract";
 
 interface Trade {
   id: string;
@@ -17,6 +18,7 @@ interface Trade {
   fee_usd: number;
   notes: string | null;
   executed_at: string;
+  transaction_hash?: string | null;
 }
 
 interface TradesListProps {
@@ -30,12 +32,13 @@ export const TradesList = ({ refreshTrigger }: TradesListProps) => {
 
   const fetchTrades = async () => {
     try {
-      const { data, error } = await supabase
-        .from("trades")
-        .select("*")
-        .order("executed_at", { ascending: false });
-
-      if (error) throw error;
+      const adapter = dbManager.getAdapter();
+      const user = await adapter.getCurrentUser();
+      if (!user) {
+        setTrades([]);
+        return;
+      }
+      const data = await adapter.getTrades(user.id);
       setTrades(data || []);
     } catch (error: any) {
       toast({
@@ -54,14 +57,14 @@ export const TradesList = ({ refreshTrigger }: TradesListProps) => {
 
   const handleDelete = async (id: string) => {
     try {
-      const { error } = await supabase.from("trades").delete().eq("id", id);
-      if (error) throw error;
-      
+      const adapter = dbManager.getAdapter();
+      await adapter.deleteTrade(id);
+
       toast({
         title: "Trade deleted",
         description: "Trade removed from history",
       });
-      
+
       fetchTrades();
     } catch (error: any) {
       toast({
@@ -138,9 +141,22 @@ export const TradesList = ({ refreshTrigger }: TradesListProps) => {
             )}
 
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
-              <p className="text-xs text-muted-foreground">
-                Fee: ${trade.fee_usd.toFixed(2)}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-muted-foreground">
+                  Fee: ${trade.fee_usd.toFixed(2)}
+                </p>
+                {trade.transaction_hash && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 px-2 text-xs"
+                    onClick={() => window.open(getTransactionEtherscanUrl(trade.transaction_hash!), '_blank')}
+                  >
+                    <ExternalLink className="h-3 w-3 mr-1" />
+                    TX
+                  </Button>
+                )}
+              </div>
               <Button
                 variant="ghost"
                 size="sm"

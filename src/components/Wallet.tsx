@@ -3,8 +3,9 @@ import { ethers } from "ethers";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wallet as WalletIcon, AlertCircle, CheckCircle } from "lucide-react";
+import { Wallet as WalletIcon, AlertCircle, CheckCircle, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getContractEtherscanUrl } from "@/lib/contract";
 
 
 declare global {
@@ -291,11 +292,21 @@ const Wallet = () => {
           </div>
         </div>
 
-        {isConnected ? (
-          <CheckCircle className="h-5 w-5 text-green-500" />
-        ) : (
-          <Badge variant="secondary">Disconnected</Badge>
-        )}
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => window.open(getContractEtherscanUrl(), '_blank')}
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+          >
+            <ExternalLink className="h-4 w-4" />
+          </Button>
+          {isConnected ? (
+            <CheckCircle className="h-5 w-5 text-green-500" />
+          ) : (
+            <Badge variant="secondary">Disconnected</Badge>
+          )}
+        </div>
       </div>
 
       {isConnected && account && (

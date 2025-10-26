@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { dbManager } from "@/lib/database";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,7 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, ExternalLink } from "lucide-react";
+import { ethers } from "ethers";
+import { tradeLoggerContract, getTransactionEtherscanUrl } from "@/lib/contract";
 
 const CRYPTO_ASSETS = [
   "BTC", "ETH", "SOL", "USDC", "USDT", "MATIC", 
@@ -34,12 +36,14 @@ export const TradeForm = ({ onTradeAdded }: TradeFormProps) => {
     setLoading(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const adapter = dbManager.getAdapter();
+      const user = await adapter.getCurrentUser();
       if (!user) throw new Error("Not authenticated");
 
       const totalValue = parseFloat(amount) * parseFloat(price);
 
-      const { error } = await supabase.from("trades").insert([{
+      // Record trade in database
+      const tradeData = await adapter.createTrade({
         user_id: user.id,
         asset: asset as any,
         trade_type: tradeType,
@@ -49,14 +53,60 @@ export const TradeForm = ({ onTradeAdded }: TradeFormProps) => {
         fee_usd: parseFloat(fee),
         notes: notes || null,
         executed_at: new Date(executedAt).toISOString(),
-      }]);
-
-      if (error) throw error;
-
-      toast({
-        title: "Trade recorded!",
-        description: `${tradeType.toUpperCase()}: ${amount} ${asset} @ $${price}`,
       });
+
+      // Log trade to smart contract if wallet is connected
+      let transactionHash: string | null = null;
+      try {
+        if (window.ethereum) {
+          const provider = new ethers.BrowserProvider(window.ethereum);
+          const signer = await provider.getSigner();
+
+          // Initialize contract with signer
+          tradeLoggerContract.initialize(provider, signer);
+
+          // Log trade to contract
+          const isBuy = tradeType === "buy";
+          const tx = await tradeLoggerContract.logTrade(asset, parseFloat(amount), parseFloat(price), isBuy);
+          transactionHash = tx.hash;
+
+          // Update the trade record with transaction hash
+          const adapter = dbManager.getAdapter();
+          if (adapter.updateTrade) {
+            try {
+              await adapter.updateTrade(tradeData[0].id, { transaction_hash: transactionHash });
+            } catch (updateError) {
+              console.error("Failed to update trade with transaction hash:", updateError);
+            }
+          }
+
+          toast({
+            title: "Trade recorded on blockchain!",
+            description: (
+              <div className="flex items-center gap-2">
+                <span>Logged to smart contract: {tradeType.toUpperCase()} {amount} {asset}</span>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="h-auto p-0 text-xs"
+                  onClick={() => window.open(getTransactionEtherscanUrl(transactionHash!), '_blank')}
+                >
+                  <ExternalLink className="h-3 w-3 mr-1" />
+                  View TX
+                </Button>
+              </div>
+            ),
+          });
+        }
+      } catch (contractError: any) {
+        console.error("Failed to log trade to contract:", contractError);
+        // Don't fail the whole operation if contract logging fails
+        toast({
+          title: "Trade recorded (database only)",
+          description: "Database saved but blockchain logging failed. Check wallet connection.",
+          variant: "default",
+        });
+      }
 
       // Reset form
       setAsset("");
@@ -65,7 +115,7 @@ export const TradeForm = ({ onTradeAdded }: TradeFormProps) => {
       setFee("0");
       setNotes("");
       setExecutedAt(new Date().toISOString().slice(0, 16));
-      
+
       onTradeAdded();
     } catch (error: any) {
       toast({

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { dbManager } from "@/lib/database";
 import { Auth } from "@/components/Auth";
 import { TradeForm } from "@/components/TradeForm";
 import { TradesList } from "@/components/TradesList";
@@ -13,6 +13,8 @@ import PerformanceChart from "@/components/PerformanceChart";
 import TransactionHistory from "@/components/TransactionHistory";
 import StatsOverview from "@/components/StatsOverview";
 import Wallet from "@/components/Wallet";
+import PnLDisplay from "@/components/PnLDisplay";
+import DatabaseSwitcher from "@/components/DatabaseSwitcher";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
@@ -21,19 +23,39 @@ const Index = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
+    const checkAuth = async () => {
+      try {
+        const adapter = dbManager.getAdapter();
+        const currentUser = await adapter.getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        setUser(null);
+      }
+    };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+    checkAuth();
 
-    return () => subscription.unsubscribe();
+    // For Supabase, use the original auth flow
+    if (dbManager.getCurrentType() === 'supabase') {
+      import("@/integrations/supabase/client").then(({ supabase }) => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          setUser(session?.user ?? null);
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+          setUser(session?.user ?? null);
+        });
+
+        return () => subscription.unsubscribe();
+      });
+    }
   }, []);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    const adapter = dbManager.getAdapter();
+    await adapter.signOut();
+    setUser(null);
     toast({
       title: "Signed out",
       description: "You have been logged out successfully",
@@ -122,8 +144,9 @@ const Index = () => {
             <div className="lg:col-span-2">
               <StatsOverview />
             </div>
-            <div>
+            <div className="space-y-4">
               <Wallet />
+              <DatabaseSwitcher />
             </div>
           </div>
 
@@ -138,6 +161,7 @@ const Index = () => {
                 <TradeForm onTradeAdded={() => setRefreshTrades(prev => prev + 1)} />
                 <PortfolioShare />
               </div>
+              <PnLDisplay />
               <TradesList refreshTrigger={refreshTrades} />
             </TabsContent>
             

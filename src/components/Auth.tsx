@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { dbManager } from "@/lib/database";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -19,22 +19,16 @@ export const Auth = () => {
     setLoading(true);
 
     try {
+      const adapter = dbManager.getAdapter();
+
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (error) throw error;
+        await adapter.signIn(email, password);
         toast({
           title: "Welcome back!",
           description: "Successfully logged in",
         });
       } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-        if (error) throw error;
+        await adapter.signUp(email, password);
         toast({
           title: "Account created!",
           description: "You can now start tracking your trades",
