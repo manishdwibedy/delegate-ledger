@@ -3,4 +3,7 @@ import "@nomicfoundation/hardhat-toolbox";
 /** @type import('hardhat/config').HardhatUserConfig */
 export default {
   solidity: "0.8.4",
+  paths: {
+    sources: "./smart_contracts",
+  },
 };

@@ -1,0 +1,40 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/manish/dev/delegate-ledger/smart_contracts/TradeLogger.sol": {
+      "lastModificationDate": 1761411859274,
+      "contentHash": "9e6d93e89baa6132a2f983a99f7b05d7",
+      "sourceName": "smart_contracts/TradeLogger.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "TradeLogger"
+      ]
+    }
+  }
+}

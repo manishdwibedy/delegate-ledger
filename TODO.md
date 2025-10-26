@@ -1,4 +1,4 @@
-# Create README.md and BUSINESS.md for DelegateX
+# Create README.md and BUSINESS.md for DelegaterX
 
 ## Information Gathered
 - DelegateX is a delegated trading platform enabling clients to grant non-custodial trading authority to managers, with performance recorded on Ethereum blockchain.
@@ -22,3 +22,33 @@
 ## Steps to Complete
 - [x] Update README.md with developer information and roadmap.
 - [x] Create BUSINESS.md with business information and roadmap.
+
+# Ensure Hardhat Works Locally for Testing
+
+## Information Gathered
+- Hardhat is configured minimally in hardhat.config.js with Solidity 0.8.4.
+- Smart contract: TradeLogger.sol in smart_contracts/.
+- Dependencies: Hardhat and related plugins in package.json devDependencies.
+- No existing tests found; need to check and possibly create.
+
+## Plan
+1. Install project dependencies to ensure Hardhat is available.
+2. Compile smart contracts to verify setup.
+3. Check for and run tests; create basic tests if none exist.
+4. Update hardhat.config.js for local testing (add networks if needed).
+5. Verify local Hardhat node can be started.
+
+## Dependent Files to be Edited/Created
+- hardhat.config.js: May need updates for networks.
+- test/ directory: If tests are missing, create basic test files.
+
+## Followup Steps
+- Test contract deployment on local network.
+- Ensure integration with frontend if applicable.
+
+## Steps to Complete
+- [x] Install dependencies (npm install)
+- [x] Compile contracts (npx hardhat compile)
+- [x] Check for tests and run them (npx hardhat test)
+- [x] Update hardhat.config.js for local testing
+- [x] Start local Hardhat node and verify
