@@ -340,18 +340,18 @@ export class TradeLoggerContract {
       throw new Error("Contract not initialized");
     }
 
-    // Convert to wei (assuming price is in ETH with 18 decimals)
+    // Convert amount to wei (18 decimals), price to USD cents (2 decimals)
     const amountWei = ethers.parseUnits(amount.toString(), 18);
-    const priceWei = ethers.parseUnits(price.toString(), 18);
+    const priceCents = ethers.parseUnits(price.toString(), 2);
 
     console.log('Logging trade to contract:', {
       tokenSymbol,
       amount: amountWei.toString(),
-      price: priceWei.toString(),
+      price: priceCents.toString(),
       isBuy
     });
 
-    const tx = await this.contract.logTrade(tokenSymbol, amountWei, priceWei, isBuy);
+    const tx = await this.contract.logTrade(tokenSymbol, amountWei, priceCents, isBuy);
     console.log('Trade logged, transaction:', tx.hash);
     return tx;
   }

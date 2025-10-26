@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
+import { ethers, formatUnits } from "ethers";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -69,14 +69,14 @@ const PnLDisplay = () => {
   }, []);
 
   const formatCurrency = (value: bigint) => {
-    // Convert from wei to ETH (assuming 18 decimals)
-    const ethValue = Number(ethers.formatEther(value));
+    // Convert from 20-decimal units to USD (amount in 18 decimals * price in 2 decimals = 20 decimals, then divide by 100)
+    const usdValue = Number(ethers.formatUnits(value, 36)) ;
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(ethValue);
+    }).format(usdValue);
   };
 
   const formatTimestamp = (timestamp: bigint) => {
