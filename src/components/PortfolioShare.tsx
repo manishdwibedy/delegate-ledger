@@ -214,12 +214,21 @@ export const PortfolioShare = () => {
               <Input
                 value={shareUrl}
                 readOnly
-                className="font-mono text-xs"
+                className="font-mono text-xs flex-1"
               />
               <Button
                 size="sm"
                 variant="outline"
+                onClick={() => window.open(shareUrl, '_blank')}
+                title="Open in new tab"
+              >
+                <Eye className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
                 onClick={copyToClipboard}
+                title="Copy to clipboard"
               >
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
